@@ -222,7 +222,19 @@ int TCP_TancaSock(int Sck) {
 /* Retorna:                                                               */
 /*  0 si tot va bé;                                                       */
 /* -1 si hi ha error.                                                     */
-int TCP_TrobaAdrSockLoc(int Sck, char *IPloc, int *portTCPloc) {}
+int TCP_TrobaAdrSockLoc(int Sck, char *IPloc, int *portTCPloc) {
+  struct sockaddr_in addr;
+  uint addr_size = sizeof(addr);
+  int sock_addr;
+
+  if (getsockname(Sck, (struct sockaddr *)&addr, &addr_size) == -1) {
+    return -1;
+  };
+
+  IPloc = inet_ntoa(addr.sin_addr);
+  portTCPloc = (int *)ntohs(addr.sin_port);
+  return 0;
+}
 
 /* Donat el socket TCP “connectat” d’identificador “Sck”, troba l’adreça  */
 /* del socket remot amb qui està connectat, omplint “IPrem” i             */
