@@ -15,7 +15,8 @@
 #include "p1-tTCP.h"
 
 /* Definició de constants, p.e.,                                          */
-
+char IPloc[] = "0.0.0.0"; //nose si esta be.. pero es la idea maomeno
+int portTCPloc = 0;
 /* #define XYZ       1500                                                 */
 
 /* Declaració de funcions INTERNES que es fan servir en aquest fitxer     */
@@ -27,6 +28,15 @@
 int main(int argc,char *argv[])
 {
  /* Declaració de variables, p.e., int n;                                 */
+
+    char TextRes[200];
+    int CodiRes;
+
+    if(TCP_CreaSockClient(*IPloc, portTCPloc) == -1) {
+        sprintf(TextRes, "TCP_CreaSockClient(): %s", T_ObteTextRes(&CodiRes));
+        exit(-1); 
+    }
+    printf("%s %d\n", TextRes, CodiRes);
 
  /* Expressions, estructures de control, crides a funcions, etc.          */
 
