@@ -65,7 +65,9 @@ int main(int argc, char *argv[]) {
   int msgSize = 200;
   char msg[msgSize];
 
+  printf("Esperant rebre...\n");
   llegit = TCP_Rep(socket_client, msg, msgSize);
+  printf("Rebut: '%s' %d bytes\n", msg, llegit);
 
   if (llegit == -1) {
     missatge_error = T_ObteTextRes(&codi_error);
@@ -74,13 +76,16 @@ int main(int argc, char *argv[]) {
     exit(-1);
   }
 
-  if (TCP_Envia(server_socket, msg, llegit) == -1) {
+  printf("Enviant: '%s' %d bytes\n", msg, llegit);
+  if ((TCP_Envia(socket_client, msg, llegit) == -1)) {
     missatge_error = T_ObteTextRes(&codi_error);
     printf("Error enviant missatge: \n%s", missatge_error);
     TCP_TancaSock(server_socket);
     exit(-1);
   }
 
+  printf("Tancant sockets...\n");
+  TCP_TancaSock(socket_client);
   TCP_TancaSock(server_socket);
 }
 

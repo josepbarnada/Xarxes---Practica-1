@@ -15,6 +15,7 @@
 #include "p1-tTCP.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 /* Definició de constants, p.e.,                                          */
 char IPloc[] = "0.0.0.0"; // nose si esta be.. pero es la idea maomeno
@@ -54,21 +55,30 @@ int main(int argc, char *argv[]) {
     exit(-1);
   };
 
+  int socket_server;
+  char *ipServer;
+  int portServ;
+
+  TCP_TrobaAdrSockRem(socket_server, ipServer, &portServ);
+
   int bufferSize = 200;
   char buffer[bufferSize];
 
-  int llegit = scanf("%s", buffer);
+  int llegit = read(STDIN_FILENO, buffer, bufferSize);
 
-  printf("Buffer: %s\n", buffer);
-
+  printf("Per Enviar: '%s' %d bytes\n", buffer, llegit);
   int enviat = TCP_Envia(socket_client, buffer, llegit);
-  printf("Enviat %d\n", enviat);
+  printf("Enviat: '%s' %d bytes\n", buffer, enviat);
 
+  printf("ESPERANT... rebre\n");
   char buffer2[bufferSize];
-
   int llegits = TCP_Rep(socket_client, buffer2, bufferSize);
+  printf("Rebut: '%s' %d bytes\n", buffer2, llegits);
 
-  printf("%s", buffer2);
+  printf("Tancants sockets...\n");
+
+  TCP_TancaSock(socket_client);
+  TCP_TancaSock(socket_server);
 }
 
 /* Definició de funcions INTERNES, és a dir, d'aquelles que es faran      */
