@@ -15,6 +15,8 @@
 /*  (si les funcions externes es cridessin entre elles, faria falta fer   */
 /*   un #include del propi fitxer capçalera)                              */
 
+#include "p1-tTCP.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -202,7 +204,13 @@ int TCP_Rep(int Sck, char *SeqBytes, int LongSeqBytes) {}
 /* Retorna:                                                               */
 /*  0 si tot va bé;                                                       */
 /* -1 si hi ha error.                                                     */
-int TCP_TancaSock(int Sck) {}
+int TCP_TancaSock(int Sck) {
+  if ((close(Sck)) == -1) {
+    perror("Error tancant socket");
+    return -1;
+  }
+  return 0;
+}
 
 /* Donat el socket TCP d’identificador “Sck”, troba l’adreça d’aquest     */
 /* socket, omplint “IPloc” i “portTCPloc” amb respectivament, la seva     */
