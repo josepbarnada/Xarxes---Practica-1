@@ -29,16 +29,33 @@ int main(int argc,char *argv[])
 {
  /* Declaració de variables, p.e., int n;                                 */
 
-    char TextRes[200];
-    int CodiRes;
+    int codi_error;
+    char *missatge_error;
+    int socket_client;
 
-    if(TCP_CreaSockClient(*IPloc, portTCPloc) == -1) {
-        sprintf(TextRes, "TCP_CreaSockClient(): %s", T_ObteTextRes(&CodiRes));
-        exit(-1); 
+    char *IP_server;
+    int port_server;
+
+
+    /* Expressions, estructures de control, crides a funcions, etc.          */
+
+    socket_client = TCP_CreaSockClient(IPloc, portTCPloc); 
+    if(socket_client == -1) {
+        TCP_TancaSock(socket_client);
+        missatge_error = T_ObteTextRes(&codi_error);
+        printf("Error creant socket client:\n%s", missatge_error);
+        exit(-1);
     }
-    printf("%s %d\n", TextRes, CodiRes);
 
- /* Expressions, estructures de control, crides a funcions, etc.          */
+
+    if ((TCP_DemanaConnexio(socket_client, IP_server, &port_server)) == -1) {
+        TCP_TancaSock(socket_client);
+        missatge_error = T_ObteTextRes(&codi_error);
+        printf("Error demanant connexió server:\n%s", missatge_error);
+        exit(-1);
+  };
+
+    printf("tot funciona be");
 
 }
 
