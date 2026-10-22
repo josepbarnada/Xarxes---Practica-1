@@ -61,7 +61,7 @@ int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
 
   // Primer cridem el socket (local)
   if ((sock_cli = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-    exit(-1);
+    return -1;
   }
 
   adrloc.sin_family = AF_INET;
@@ -72,8 +72,7 @@ int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
   }
 
   if ((bind(sock_cli, (struct sockaddr *)&adrloc, sizeof(adrloc))) == -1) {
-    close(sock_cli);
-    exit(-1);
+    return -1;
   }
 
   return sock_cli;
