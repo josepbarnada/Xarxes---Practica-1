@@ -57,23 +57,23 @@ int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
   struct sockaddr_in adrloc;
   int sock_cli;
 
-   // Primer cridem el socket (local)
-	if ((scon = socket(AF_INET, SOCK_STREAM,0))==-1){
+  // Primer cridem el socket (local)
+  if ((scon = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     perror("Error en socket");
     exit(-1);
   }
 
-  adrloc.sin_family=AF_INET;
-  adrloc.sin_port=htons(portTCPloc);
-  adrloc.sin_addr.s_addr=inet_addr(*IPloc);
-  for(i=0;i<8;i++){
-    adrloc.sin_zero[i]='\0';
+  adrloc.sin_family = AF_INET;
+  adrloc.sin_port = htons(portTCPloc);
+  adrloc.sin_addr.s_addr = inet_addr(*IPloc);
+  for (i = 0; i < 8; i++) {
+    adrloc.sin_zero[i] = '\0';
   }
 
-  if((bind(sock_cli,(struct sockaddr*)&adrloc,sizeof(adrloc)))==-1){
-      perror("Error en bind");
-      close(sock_cli);
-      exit(-1);
+  if ((bind(sock_cli, (struct sockaddr *)&adrloc, sizeof(adrloc))) == -1) {
+    perror("Error en bind");
+    close(sock_cli);
+    exit(-1);
   }
 
   return sock_cli;
@@ -152,7 +152,23 @@ int TCP_DemanaConnexio(int Sck, const char *IPrem, int portTCPrem) {}
 /* Retorna:                                                               */
 /*  l'identificador del socket connectat creat si tot va bé;              */
 /* -1 si hi ha error.                                                     */
-int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) {}
+int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) {
+  struct sockaddr_in add_rem;
+  int sock_conn;
+  uint long_add_rem = sizeof(add_rem);
+
+  if ((sock_conn = accept(Sck, (struct sockaddr *)&add_rem, &long_add_rem)) ==
+      -1) {
+    perror("Erro en acceptar connexio");
+    close(sock_conn);
+    return -1;
+  }
+
+  IPrem = inet_ntoa(add_rem.sin_addr);
+  portTCPrem = (int *)ntohs(add_rem.sin_port);
+
+  return sock_conn;
+}
 
 /* Envia a través del socket TCP “connectat” d’identificador “Sck” la     */
 /* seqüència de bytes escrita a “SeqBytes” (de longitud “LongSeqBytes”    */
