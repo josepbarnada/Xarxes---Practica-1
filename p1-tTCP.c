@@ -20,10 +20,10 @@
 #include <stdio.h>
 #include <string.h>
 
-// #include <arpa/inet.h>
-// #include <errno.h>
-// #include <netinet/in.h>
-// #include <sys/socket.h>
+#include <arpa/inet.h>
+#include <errno.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -61,7 +61,6 @@ int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
 
   // Primer cridem el socket (local)
   if ((sock_cli = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-    perror("Error en socket");
     exit(-1);
   }
 
@@ -73,7 +72,6 @@ int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
   }
 
   if ((bind(sock_cli, (struct sockaddr *)&adrloc, sizeof(adrloc))) == -1) {
-    perror("Error en bind");
     close(sock_cli);
     exit(-1);
   }
@@ -97,7 +95,6 @@ int TCP_CreaSockServidor(const char *IPloc, int portTCPloc) {
   int sock_serv;
 
   if ((sock_serv = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-    perror("Error server socket");
     return -1;
   }
 
@@ -109,13 +106,11 @@ int TCP_CreaSockServidor(const char *IPloc, int portTCPloc) {
   }
 
   if ((bind(sock_serv, (struct sockaddr *)&adrloc, sizeof(adrloc))) == -1) {
-    perror("Error en bind");
     close(sock_serv);
     return -1;
   }
 
   if ((listen(sock_serv, 1)) == -1) {
-    perror("Error en listen");
     close(sock_serv);
     return -1;
   }
@@ -161,7 +156,6 @@ int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) {
 
   if ((sock_conn = accept(Sck, (struct sockaddr *)&add_rem, &long_add_rem)) ==
       -1) {
-    perror("Erro en acceptar connexio");
     close(sock_conn);
     return -1;
   }
@@ -206,7 +200,6 @@ int TCP_Rep(int Sck, char *SeqBytes, int LongSeqBytes) {}
 /* -1 si hi ha error.                                                     */
 int TCP_TancaSock(int Sck) {
   if ((close(Sck)) == -1) {
-    perror("Error tancant socket");
     return -1;
   }
   return 0;
