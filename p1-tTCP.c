@@ -191,7 +191,6 @@ int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) {
 int TCP_Envia(int Sck, const char *SeqBytes, int LongSeqBytes) {
   int bytes_escrits;
   if ((bytes_escrits = write(Sck, SeqBytes, LongSeqBytes) == -1)) {
-    close(Sck);
     return -1;
   }
   return bytes_escrits;
@@ -210,7 +209,24 @@ int TCP_Envia(int Sck, const char *SeqBytes, int LongSeqBytes) {
 /*  0 si la connexió està tancada;                                        */
 /* -1 si hi ha error.                                                     */
 int TCP_Rep(int Sck, char *SeqBytes, int LongSeqBytes) {
-  return read(Sck, SeqBytes, LongSeqBytes);
+  int bufferSize = 200;
+  char buffer[bufferSize];
+
+  int total = 0;
+  int llegit;
+  while ((llegit = read(Sck, buffer, bufferSize) >= 0)) {
+    total += llegit;
+    printf("Rebut %d\n", llegit);
+
+    if (total <= LongSeqBytes) {
+      strcat(SeqBytes, buffer);
+    }
+  }
+
+  if (llegit - 1) {
+    return -1;
+  }
+  return total;
 }
 
 /* S’allibera (s’esborra) el socket TCP d’identificador “Sck”; si “Sck”   */

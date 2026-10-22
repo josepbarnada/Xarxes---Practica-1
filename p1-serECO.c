@@ -52,23 +52,20 @@ int main(int argc, char *argv[]) {
     exit(-1);
   }
 
-  if ((TCP_AcceptaConnexio(server_socket, IP_client, &port_client)) == -1) {
+  int socket_client;
+
+  if ((socket_client =
+           TCP_AcceptaConnexio(server_socket, IP_client, &port_client)) == -1) {
     missatge_error = T_ObteTextRes(&codi_error);
     printf("Error acceptant socket client:\n%s", missatge_error);
     TCP_TancaSock(server_socket);
     exit(-1);
   };
 
-  int size = 0;
-  char *message;
+  int msgSize = 200;
+  char msg[msgSize];
 
-  int bufferSize = 200;
-  char buffer[bufferSize];
-
-  while ((llegit = TCP_Rep(server_socket, buffer, bufferSize)) > 0) {
-    size += llegit;
-    strcat(message, buffer);
-  }
+  llegit = TCP_Rep(socket_client, msg, msgSize);
 
   if (llegit == -1) {
     missatge_error = T_ObteTextRes(&codi_error);
@@ -77,7 +74,7 @@ int main(int argc, char *argv[]) {
     exit(-1);
   }
 
-  if (TCP_Envia(server_socket, message, size) == -1) {
+  if (TCP_Envia(server_socket, msg, llegit) == -1) {
     missatge_error = T_ObteTextRes(&codi_error);
     printf("Error enviant missatge: \n%s", missatge_error);
     TCP_TancaSock(server_socket);

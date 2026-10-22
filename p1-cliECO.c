@@ -13,10 +13,12 @@
 /* Inclusió de llibreries, p.e. #include <stdio.h> o #include "meu.h"     */
 
 #include "p1-tTCP.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /* Definició de constants, p.e.,                                          */
-char IPloc[] = "192.168.1.32"; // nose si esta be.. pero es la idea maomeno
-int portTCPloc = 8000;
+char IPloc[] = "0.0.0.0"; // nose si esta be.. pero es la idea maomeno
+int portTCPloc = 0;
 /* #define XYZ       1500                                                 */
 
 /* Declaració de funcions INTERNES que es fan servir en aquest fitxer     */
@@ -32,27 +34,41 @@ int main(int argc, char *argv[]) {
   char *missatge_error;
   int socket_client;
 
-  char *IP_server;
-  int port_server;
+  char *IP_server = "192.168.1.36";
+  int port_server = 8000;
 
   /* Expressions, estructures de control, crides a funcions, etc.          */
 
   socket_client = TCP_CreaSockClient(IPloc, portTCPloc);
   if (socket_client == -1) {
-    TCP_TancaSock(socket_client);
     missatge_error = T_ObteTextRes(&codi_error);
     printf("Error creant socket client:\n%s", missatge_error);
+    TCP_TancaSock(socket_client);
     exit(-1);
   }
 
-  if ((TCP_DemanaConnexio(socket_client, IP_server, &port_server)) == -1) {
+  if ((TCP_DemanaConnexio(socket_client, IP_server, port_server)) == -1) {
     TCP_TancaSock(socket_client);
     missatge_error = T_ObteTextRes(&codi_error);
     printf("Error demanant connexió server:\n%s", missatge_error);
     exit(-1);
   };
 
-  printf("tot funciona be");
+  int bufferSize = 200;
+  char buffer[bufferSize];
+
+  int llegit = scanf("%s", buffer);
+
+  printf("Buffer: %s\n", buffer);
+
+  int enviat = TCP_Envia(socket_client, buffer, llegit);
+  printf("Enviat %d\n", enviat);
+
+  char buffer2[bufferSize];
+
+  int llegits = TCP_Rep(socket_client, buffer2, bufferSize);
+
+  printf("%s", buffer2);
 }
 
 /* Definició de funcions INTERNES, és a dir, d'aquelles que es faran      */
