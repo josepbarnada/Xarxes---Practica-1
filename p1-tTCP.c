@@ -203,7 +203,9 @@ int TCP_Envia(int Sck, const char *SeqBytes, int LongSeqBytes) {}
 /*  el nombre de bytes rebuts si tot va bé;                               */
 /*  0 si la connexió està tancada;                                        */
 /* -1 si hi ha error.                                                     */
-int TCP_Rep(int Sck, char *SeqBytes, int LongSeqBytes) {}
+int TCP_Rep(int Sck, char *SeqBytes, int LongSeqBytes) {
+  return read(Sck, SeqBytes, LongSeqBytes);
+}
 
 /* S’allibera (s’esborra) el socket TCP d’identificador “Sck”; si “Sck”   */
 /* està connectat es tanca la connexió TCP que té establerta.             */
