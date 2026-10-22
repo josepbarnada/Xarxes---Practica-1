@@ -106,12 +106,10 @@ int TCP_CreaSockServidor(const char *IPloc, int portTCPloc) {
   }
 
   if ((bind(sock_serv, (struct sockaddr *)&adrloc, sizeof(adrloc))) == -1) {
-    close(sock_serv);
     return -1;
   }
 
   if ((listen(sock_serv, 1)) == -1) {
-    close(sock_serv);
     return -1;
   }
 
@@ -131,7 +129,23 @@ int TCP_CreaSockServidor(const char *IPloc, int portTCPloc) {
 /* Retorna:                                                               */
 /*  0 si tot va bé;                                                       */
 /* -1 si hi ha error.                                                     */
-int TCP_DemanaConnexio(int Sck, const char *IPrem, int portTCPrem) {}
+int TCP_DemanaConnexio(int Sck, const char *IPrem, int portTCPrem) {
+  struct sockaddr_in server_addr;
+
+  server_addr.sin_port = htons(portTCPrem);
+  server_addr.sin_addr.s_addr = inet_addr(IPrem);
+  server_addr.sin_family = AF_INET;
+  for (int i = 0; i < 8; i++) {
+    server_addr.sin_zero[i] = 0;
+  }
+
+  if ((connect(Sck, (struct sockaddr *)&server_addr, sizeof(server_addr))) ==
+      -1) {
+    return -1;
+  }
+
+  return 0;
+}
 
 /* El socket TCP “servidor” d’identificador “Sck” accepta fer una         */
 /* connexió amb un socket TCP “client” remot, i crea un “nou” socket,     */
@@ -156,7 +170,6 @@ int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) {
 
   if ((sock_conn = accept(Sck, (struct sockaddr *)&add_rem, &long_add_rem)) ==
       -1) {
-    close(sock_conn);
     return -1;
   }
 
