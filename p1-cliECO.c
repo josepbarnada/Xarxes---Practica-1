@@ -15,8 +15,8 @@
 #include "p1-tTCP.h"
 
 /* Definició de constants, p.e.,                                          */
-char IPloc[] = "0.0.0.0"; //nose si esta be.. pero es la idea maomeno
-int portTCPloc = 0;
+char IPloc[] = "192.168.1.32"; // nose si esta be.. pero es la idea maomeno
+int portTCPloc = 8000;
 /* #define XYZ       1500                                                 */
 
 /* Declaració de funcions INTERNES que es fan servir en aquest fitxer     */
@@ -25,38 +25,34 @@ int portTCPloc = 0;
 
 /* int FuncioInterna(arg1, arg2...);                                      */
 
-int main(int argc,char *argv[])
-{
- /* Declaració de variables, p.e., int n;                                 */
+int main(int argc, char *argv[]) {
+  /* Declaració de variables, p.e., int n;                                 */
 
-    int codi_error;
-    char *missatge_error;
-    int socket_client;
+  int codi_error;
+  char *missatge_error;
+  int socket_client;
 
-    char *IP_server;
-    int port_server;
+  char *IP_server;
+  int port_server;
 
+  /* Expressions, estructures de control, crides a funcions, etc.          */
 
-    /* Expressions, estructures de control, crides a funcions, etc.          */
+  socket_client = TCP_CreaSockClient(IPloc, portTCPloc);
+  if (socket_client == -1) {
+    TCP_TancaSock(socket_client);
+    missatge_error = T_ObteTextRes(&codi_error);
+    printf("Error creant socket client:\n%s", missatge_error);
+    exit(-1);
+  }
 
-    socket_client = TCP_CreaSockClient(IPloc, portTCPloc); 
-    if(socket_client == -1) {
-        TCP_TancaSock(socket_client);
-        missatge_error = T_ObteTextRes(&codi_error);
-        printf("Error creant socket client:\n%s", missatge_error);
-        exit(-1);
-    }
-
-
-    if ((TCP_DemanaConnexio(socket_client, IP_server, &port_server)) == -1) {
-        TCP_TancaSock(socket_client);
-        missatge_error = T_ObteTextRes(&codi_error);
-        printf("Error demanant connexió server:\n%s", missatge_error);
-        exit(-1);
+  if ((TCP_DemanaConnexio(socket_client, IP_server, &port_server)) == -1) {
+    TCP_TancaSock(socket_client);
+    missatge_error = T_ObteTextRes(&codi_error);
+    printf("Error demanant connexió server:\n%s", missatge_error);
+    exit(-1);
   };
 
-    printf("tot funciona be");
-
+  printf("tot funciona be");
 }
 
 /* Definició de funcions INTERNES, és a dir, d'aquelles que es faran      */
@@ -66,5 +62,5 @@ int main(int argc,char *argv[])
 /* Descripció de la funció, dels arguments, valors de retorn, etc.        */
 /*int FuncioInterna(arg1, arg2...)
 {
-	
+
 } */

@@ -21,7 +21,7 @@
 
 /* #define XYZ       1500                                                 */
 
-#define IP "192.168.1.42"
+#define IP "192.168.1.36"
 #define PORT 8000
 
 /* Declaració de funcions INTERNES que es fan servir en aquest fitxer     */
@@ -44,18 +44,18 @@ int main(int argc, char *argv[]) {
 
   /* Expressions, estructures de control, crides a funcions, etc.          */
 
-  server_socket = TCP_CreaSockClient(IP, PORT);
+  server_socket = TCP_CreaSockServidor(IP, PORT);
   if (server_socket == -1) {
-    TCP_TancaSock(server_socket);
     missatge_error = T_ObteTextRes(&codi_error);
     printf("Error creant socket:\n%s", missatge_error);
+    TCP_TancaSock(server_socket);
     exit(-1);
   }
 
   if ((TCP_AcceptaConnexio(server_socket, IP_client, &port_client)) == -1) {
-    TCP_TancaSock(server_socket);
     missatge_error = T_ObteTextRes(&codi_error);
     printf("Error acceptant socket client:\n%s", missatge_error);
+    TCP_TancaSock(server_socket);
     exit(-1);
   };
 
@@ -71,13 +71,20 @@ int main(int argc, char *argv[]) {
   }
 
   if (llegit == -1) {
-    TCP_TancaSock(server_socket);
     missatge_error = T_ObteTextRes(&codi_error);
     printf("Error llegint missatge: \n%s", missatge_error);
+    TCP_TancaSock(server_socket);
     exit(-1);
   }
 
-  TCP_Envia(server_socket, message, size);
+  if (TCP_Envia(server_socket, message, size) == -1) {
+    missatge_error = T_ObteTextRes(&codi_error);
+    printf("Error enviant missatge: \n%s", missatge_error);
+    TCP_TancaSock(server_socket);
+    exit(-1);
+  }
+
+  TCP_TancaSock(server_socket);
 }
 
 /* Definició de funcions INTERNES, és a dir, d'aquelles que es faran      */

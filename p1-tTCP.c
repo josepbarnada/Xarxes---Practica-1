@@ -190,7 +190,7 @@ int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) {
 /* -1 si hi ha error.                                                     */
 int TCP_Envia(int Sck, const char *SeqBytes, int LongSeqBytes) {
   int bytes_escrits;
-  if ((bytes_escrits=write(Sck, SeqBytes, LongSeqBytes)==-1)){
+  if ((bytes_escrits = write(Sck, SeqBytes, LongSeqBytes) == -1)) {
     close(Sck);
     return -1;
   }
