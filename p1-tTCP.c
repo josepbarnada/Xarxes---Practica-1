@@ -190,10 +190,12 @@ int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) {
 /*  el nombre de bytes enviats si tot va bé;                              */
 /* -1 si hi ha error.                                                     */
 int TCP_Envia(int Sck, const char *SeqBytes, int LongSeqBytes) {
-  if (/*bytes_escrits*/write(Sck, SeqBytes, LongSeqBytes)==-1){
+  int bytes_escrits;
+  if ((bytes_escrits=write(Sck, SeqBytes, LongSeqBytes)==-1)){
     close(Sck);
     return -1;
   }
+  return bytes_escrits;
 }
 
 /* Rep a través del socket TCP “connectat” d’identificador “Sck” una      */
