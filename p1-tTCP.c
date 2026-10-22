@@ -20,10 +20,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <arpa/inet.h>
-#include <errno.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
+// #include <arpa/inet.h>
+// #include <errno.h>
+// #include <netinet/in.h>
+// #include <sys/socket.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -60,15 +60,15 @@ int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
   int sock_cli;
 
   // Primer cridem el socket (local)
-  if ((scon = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+  if ((sock_cli = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     perror("Error en socket");
     exit(-1);
   }
 
   adrloc.sin_family = AF_INET;
   adrloc.sin_port = htons(portTCPloc);
-  adrloc.sin_addr.s_addr = inet_addr(*IPloc);
-  for (i = 0; i < 8; i++) {
+  adrloc.sin_addr.s_addr = inet_addr(IPloc);
+  for (int i = 0; i < 8; i++) {
     adrloc.sin_zero[i] = '\0';
   }
 
