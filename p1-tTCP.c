@@ -246,7 +246,19 @@ int TCP_TrobaAdrSockLoc(int Sck, char *IPloc, int *portTCPloc) {
 /* Retorna:                                                               */
 /*  0 si tot va bé;                                                       */
 /* -1 si hi ha error.                                                     */
-int TCP_TrobaAdrSockRem(int Sck, char *IPrem, int *portTCPrem) {}
+int TCP_TrobaAdrSockRem(int Sck, char *IPrem, int *portTCPrem) {
+  struct sockaddr_in addr;
+  uint addr_size = sizeof(addr);
+  int sock_addr;
+
+  if (getpeername(Sck, (struct sockaddr *)&addr, &addr_size) == -1) {
+    return -1;
+  };
+
+  IPrem = inet_ntoa(addr.sin_addr);
+  portTCPrem = (int *)ntohs(addr.sin_port);
+  return 0;
+}
 
 /* Obté un missatge de text de l'S.O. que descriu l'error produït en      */
 /* la darrera crida de sockets TCP, i omple "CodiRes" amb la variable     */
