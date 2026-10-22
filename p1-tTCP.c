@@ -52,24 +52,31 @@
 /* Retorna:                                                               */
 /*  l'identificador del socket creat si tot va bé;                        */
 /* -1 si hi ha error.                                                     */
+
 int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
+  struct sockaddr_in adrloc;
+  int sock_cli;
+
    // Primer cridem el socket (local)
 	if ((scon = socket(AF_INET, SOCK_STREAM,0))==-1){
     perror("Error en socket");
     exit(-1);
-}
+  }
 
-adrloc.sin_family=AF_INET;
-adrloc.sin_port=htons(portTCPloc);
-adrloc.sin_addr.s_addr=inet_addr(*IPloc);
-for(i=0;i<8;i++){adrloc.sin_zero[i]='\0';}
+  adrloc.sin_family=AF_INET;
+  adrloc.sin_port=htons(portTCPloc);
+  adrloc.sin_addr.s_addr=inet_addr(*IPloc);
+  for(i=0;i<8;i++){
+    adrloc.sin_zero[i]='\0';
+  }
 
-//es crea el bind ////// posa q es opcional.. nose??
-if((bind(scon,(struct sockaddr*)&adrloc,sizeof(adrloc)))==-1){
-    perror("Error en bind");
-    close(scon);
-    exit(-1);
-}
+  if((bind(sock_cli,(struct sockaddr*)&adrloc,sizeof(adrloc)))==-1){
+      perror("Error en bind");
+      close(sock_cli);
+      exit(-1);
+  }
+
+  return sock_cli;
 }
 
 /* Crea un socket TCP “servidor” (o en estat d’escolta – listen –) a      */
