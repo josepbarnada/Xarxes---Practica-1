@@ -71,6 +71,7 @@ void ms2() {
 }
 
 int main(int argc, char *argv[]) {
+  char *linea;
 
   signal(SIGINT, tancarServidor);
 
@@ -111,27 +112,17 @@ int main(int argc, char *argv[]) {
     int bytes_llegits;
     do {
       printf("\nEsperant missatge del client...\n");
-      // int bufferSize = 200;
-      // char buffer[bufferSize];
-
-      char *linea;
-
-      // zero(buffer, bufferSize);
 
       int mida_linea;
       bytes_llegits = rebreLinea(socket_client, &linea, &mida_linea);
-
-      // bytes_llegits = TCP_Rep(socket_client, buffer, bufferSize);
 
       if (running && bytes_llegits == -1) {
         mostrarError("Error llegit missatge del socket client");
 
       } else if (bytes_llegits > 0) {
         printf("Missatge rebut (%d bytes):\n'%s'\n", bytes_llegits, linea);
-        // printf("Missatge rebut:\n%s\nBytes: %d\n", buffer, bytes_llegits);
 
         int bytes_enviats = enviarLinea(socket_client, linea, mida_linea);
-        // int bytes_enviats = TCP_Envia(socket_client, buffer, bytes_llegits);
 
         if (running && bytes_enviats == -1) {
           mostrarError("Error enviant missatge al socket client");
@@ -141,6 +132,8 @@ int main(int argc, char *argv[]) {
       }
     } while (bytes_llegits > 0);
   }
+
+  free(linea);
 
   /* Declaració de variables, p.e., int n;                                 */
   /* Expressions, estructures de control, crides a funcions, etc.          */
