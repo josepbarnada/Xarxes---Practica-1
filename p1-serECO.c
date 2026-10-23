@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
 
 /* Definició de constants, p.e.,                                          */
 
@@ -25,7 +26,7 @@
 #define true 1
 #define false 0
 
-#define IP_serv "0.0.0.0"
+#define IP_serv "192.168.1.36"
 
 #define IP_LENGTH 16
 
@@ -68,6 +69,23 @@ void tancarServidor(int dummy) {
   printf("Sockets tancats\n");
 }
 
+void mostrarSocket(char *nom, char *ip, int port) {
+  printf("\n%s:\n\tIP:\t%s\n\tPort:\t%d\n", nom, ip, port);
+}
+
+void ms2() {
+  char ip_serv[IP_LENGTH], ip_client[IP_LENGTH];
+  int port_serv, port_client;
+
+  TCP_TrobaAdrSockLoc(socket_server, ip_serv, &port_serv);
+  TCP_TrobaAdrSockLoc(socket_client, ip_client, &port_client);
+
+  printf("\n========= Millor Senzilla 2 ==========\n");
+  mostrarSocket("Socket server", ip_serv, port_serv);
+  mostrarSocket("Socket client", ip_client, port_client);
+  printf("\n======================================\n");
+}
+
 int main(int argc, char *argv[]) {
 
   signal(SIGINT, tancarServidor);
@@ -96,11 +114,15 @@ int main(int argc, char *argv[]) {
       TCP_TancaSock(socket_client);
       continue;
     }
+
     printf("Connexio acceptada:\n");
-    printf("\nServer (socket local):\n\tIP:\t%s\n\tPort:\t%d\n", IP_serv,
-           port_server);
-    printf("\nClient (socket remot):\n\tIP:\t%s\n\tPort:\t%d\n", IP_client,
-           port_client);
+    mostrarSocket("Server (socket local)", IP_serv, port_server);
+    mostrarSocket("Client (socket remot)", IP_client, port_client);
+
+    // Funcio per fer la millor senzilla 2 decomentar en cas que es vulgui mirar
+    // el contingut dels 2 sockets del servidor.
+    //
+    // ms2();
 
     // Aixo no es true pero no ser com es per comprovar que el socket client
     // tingui connectivitat
