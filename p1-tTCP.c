@@ -174,8 +174,8 @@ int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) {
     return -1;
   }
 
-  IPrem = inet_ntoa(add_rem.sin_addr);
-  portTCPrem = (int *)ntohs(add_rem.sin_port);
+  strcpy(IPrem, inet_ntoa(add_rem.sin_addr));
+  *portTCPrem = ntohs(add_rem.sin_port);
 
   return sock_conn;
 }
