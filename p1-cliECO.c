@@ -31,69 +31,72 @@ int portTCPloc = 0;
 
 int main(int argc, char *argv[]) {
   /* Declaració de variables, p.e., int n;                                 */
+  int continuar = 1;
 
-  int codi_error;
-  char *missatge_error;
-  int socket_client;
-
-  printf("Entra la IP del servidor: ");
-  char IP_server[IP_LONG] = "192.168.1.36";
-  // scanf("%s", IP_server);
-
-  printf("Entra el port del servidor: ");
-  int port_server = 8000;
+  while(continuar){
+    
+    int codi_error;
+    char *missatge_error;
+    int socket_client;
+    
+    printf("Entra la IP del servidor: ");
+    char IP_server[IP_LONG] = "192.168.1.36";
+    // scanf("%s", IP_server);
+    
+    printf("Entra el port del servidor: ");
+    int port_server = 8000;
   // scanf("%d", &port_server);
-
+  
   printf("Iniciant connexio al servidor %s amb port: %d\n", IP_server,
-         port_server);
-
-  /* Expressions, estructures de control, crides a funcions, etc.          */
-
-  socket_client = TCP_CreaSockClient(IPloc, portTCPloc);
-  if (socket_client == -1) {
-    missatge_error = T_ObteTextRes(&codi_error);
-    printf("Error creant socket client:\n%s", missatge_error);
-    TCP_TancaSock(socket_client);
-    exit(-1);
-  }
-
-  if ((TCP_DemanaConnexio(socket_client, IP_server, port_server)) == -1) {
-    TCP_TancaSock(socket_client);
-    missatge_error = T_ObteTextRes(&codi_error);
-    printf("Error demanant connexió server:\n%s", missatge_error);
-    exit(-1);
-  };
-
-  // int socket_server;
-  // char *ipServer;
-  // int portServ;
-
-  // TCP_TrobaAdrSockRem(socket_server, ipServer, &portServ);
-
-  int bufferSize = 200;
-  char buffer[bufferSize];
-  int llegit = read(STDIN_FILENO, buffer, bufferSize);
-
-  for (int i = llegit - 1; i < bufferSize; i++) {
-    buffer[i] = '\0';
-  }
-
-  while (strcmp(buffer, "EOF") != 0) {
-
-    printf("Per Enviar: '%s' %d bytes\n", buffer, llegit);
-    int enviat;
-    if ((enviat = TCP_Envia(socket_client, buffer, llegit)) == -1) {
-      missatge_error = T_ObteTextRes(&codi_error);
-      printf("Error enviant missatge: \n%s", missatge_error);
-      TCP_TancaSock(socket_client);
-      exit(-1);
-    } else if (enviat == 0) {
-      printf("El servidor ha tancat la connexió");
-      TCP_TancaSock(socket_client);
-      exit(-1);
-    }
-    printf("Enviat: '%s' %d bytes\n", buffer, enviat);
-
+        port_server);
+        
+         /* Expressions, estructures de control, crides a funcions, etc.          */
+        
+        socket_client = TCP_CreaSockClient(IPloc, portTCPloc);
+        if (socket_client == -1) {
+          missatge_error = T_ObteTextRes(&codi_error);
+          printf("Error creant socket client:\n%s", missatge_error);
+          TCP_TancaSock(socket_client);
+          exit(-1);
+          }
+          
+          if ((TCP_DemanaConnexio(socket_client, IP_server, port_server)) == -1) {
+            TCP_TancaSock(socket_client);
+            missatge_error = T_ObteTextRes(&codi_error);
+            printf("Error demanant connexió server:\n%s", missatge_error);
+            exit(-1);
+          };
+          
+          // int socket_server;
+          // char *ipServer;
+          // int portServ;
+          
+          // TCP_TrobaAdrSockRem(socket_server, ipServer, &portServ);
+          
+          int bufferSize = 200;
+          char buffer[bufferSize];
+          int llegit = read(STDIN_FILENO, buffer, bufferSize);
+          
+          for (int i = llegit - 1; i < bufferSize; i++) {
+            buffer[i] = '\0';
+          }
+          
+          while (strcmp(buffer, "EOF") != 0) {
+            
+            printf("Per Enviar: '%s' %d bytes\n", buffer, llegit);
+            int enviat;
+            if ((enviat = TCP_Envia(socket_client, buffer, llegit)) == -1) {
+              missatge_error = T_ObteTextRes(&codi_error);
+              printf("Error enviant missatge: \n%s", missatge_error);
+              TCP_TancaSock(socket_client);
+              exit(-1);
+            } else if (enviat == 0) {
+              printf("El servidor ha tancat la connexió");
+              TCP_TancaSock(socket_client);
+              exit(-1);
+            }
+            printf("Enviat: '%s' %d bytes\n", buffer, enviat);
+            
     printf("ESPERANT... rebre\n");
 
     int llegits;
@@ -104,18 +107,23 @@ int main(int argc, char *argv[]) {
       exit(-1);
     }
     printf("Rebut: '%s' %d bytes\n", buffer, llegits);
-
+    
     llegit = read(STDIN_FILENO, buffer, bufferSize);
-
+    
     for (int i = llegit - 1; i < bufferSize; i++) {
       buffer[i] = '\0';
     }
   }
-
+  
   printf("Tancants sockets...\n");
-
+  
   TCP_TancaSock(socket_client);
   // TCP_TancaSock(socket_server);
+
+  printf("Vols enviar missatges a un altre servidor? [0: no |||| 1: si]: ");
+  scanf("%d", continuar);
+
+  }
 }
 
 /* Definició de funcions INTERNES, és a dir, d'aquelles que es faran      */
