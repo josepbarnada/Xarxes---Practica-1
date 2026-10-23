@@ -87,6 +87,10 @@ int main(int argc, char *argv[]) {
       printf("Error enviant missatge: \n%s", missatge_error);
       TCP_TancaSock(socket_client);
       exit(-1);
+    } else if (enviat == 0){
+      printf("El servidor ha tancat la connexió");
+      TCP_TancaSock(socket_client);
+      exit(-1);
     }
     printf("Enviat: '%s' %d bytes\n", buffer, enviat);
   
@@ -100,8 +104,6 @@ int main(int argc, char *argv[]) {
       exit(-1);
     }
     printf("Rebut: '%s' %d bytes\n", buffer, llegits);
-
-    //pot tancar servidor aqui entremig no?? revisar tb...
 
     llegit = read(STDIN_FILENO, buffer, bufferSize);
   }
