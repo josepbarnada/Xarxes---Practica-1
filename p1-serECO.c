@@ -24,7 +24,7 @@
 #define true 1
 #define false 0
 
-#define IP "192.168.1.36"
+#define IP_serv "192.168.1.36"
 
 /* Declaració de funcions INTERNES que es fan servir en aquest fitxer     */
 /* (les  definicions d'aquestes funcions es troben més avall) per així    */
@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
   scanf("%d", &port_server);
   printf("\nIniciant el servidor amb port: %d\n", port_server);
 
-  int socket_server = TCP_CreaSockServidor(IP, port_server);
+  int socket_server = TCP_CreaSockServidor(IP_serv, port_server);
   if (socket_server == -1) {
     mostrarError("Error creant socket");
     TCP_TancaSock(socket_server);
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
       continue;
     }
     printf("Connexio acceptada:\n");
-    printf("\nServer (socket local):\n\tIP:\t%s\n\tPort:\t%d\n", IP,
+    printf("\nServer (socket local):\n\tIP:\t%s\n\tPort:\t%d\n", IP_serv,
            port_server);
     printf("\nClient (socket remot):\n\tIP:\t%s\n\tPort:\t%d\n", IP_client,
            port_client);
