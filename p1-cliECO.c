@@ -66,6 +66,9 @@ int main(int argc, char *argv[]) {
             printf("Error demanant connexió server:\n%s", missatge_error);
             exit(-1);
           };
+
+          printf("\nClient (socket local):\n\tIP:\t%s\n\tPort:\t%d\n", IPloc, portTCPloc);
+          printf("\nServer (socket remot):\n\tIP:\t%s\n\tPort:\t%d\n", IP_server, port_server);
           
           // int socket_server;
           // char *ipServer;
@@ -81,7 +84,7 @@ int main(int argc, char *argv[]) {
             buffer[i] = '\0';
           }
           
-          while (strcmp(buffer, "EOF") != 0) {
+          while (llegit > 0 && strcmp(buffer, "EOF") != 0) {
             
             printf("Per Enviar: '%s' %d bytes\n", buffer, llegit);
             int enviat;
@@ -90,30 +93,30 @@ int main(int argc, char *argv[]) {
               printf("Error enviant missatge: \n%s", missatge_error);
               TCP_TancaSock(socket_client);
               exit(-1);
-            } else if (enviat == 0) {
-              printf("El servidor ha tancat la connexió");
-              TCP_TancaSock(socket_client);
-              exit(-1);
             }
             printf("Enviat: '%s' %d bytes\n", buffer, enviat);
             
-    printf("ESPERANT... rebre\n");
+            printf("ESPERANT... rebre\n");
 
-    int llegits;
-    if ((llegits = TCP_Rep(socket_client, buffer, bufferSize)) == -1) {
-      missatge_error = T_ObteTextRes(&codi_error);
-      printf("Error rebent missatge: \n%s", missatge_error);
-      TCP_TancaSock(socket_client);
-      exit(-1);
-    }
-    printf("Rebut: '%s' %d bytes\n", buffer, llegits);
-    
-    llegit = read(STDIN_FILENO, buffer, bufferSize);
-    
-    for (int i = llegit - 1; i < bufferSize; i++) {
-      buffer[i] = '\0';
-    }
-  }
+            int llegits;
+            if ((llegits = TCP_Rep(socket_client, buffer, bufferSize)) == -1) {
+              missatge_error = T_ObteTextRes(&codi_error);
+              printf("Error rebent missatge: \n%s", missatge_error);
+              TCP_TancaSock(socket_client);
+              exit(-1);
+            } else if (llegits == 0) {
+              printf("El servidor ha tancat la connexió");
+              TCP_TancaSock(socket_client);
+              break; //pq l'usuari es pugui connectar a un altre server si vol
+            }
+            printf("Rebut: '%s' %d bytes\n", buffer, llegits);
+            
+            llegit = read(STDIN_FILENO, buffer, bufferSize);
+            
+            for (int i = llegit - 1; i < bufferSize; i++) {
+              buffer[i] = '\0';
+            }
+          }
   
   printf("Tancants sockets...\n");
   

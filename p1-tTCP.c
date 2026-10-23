@@ -236,7 +236,6 @@ int TCP_TancaSock(int Sck) {
 int TCP_TrobaAdrSockLoc(int Sck, char *IPloc, int *portTCPloc) {
   struct sockaddr_in addr;
   uint addr_size = sizeof(addr);
-  int sock_addr;
 
   if (getsockname(Sck, (struct sockaddr *)&addr, &addr_size) == -1) {
     return -1;
@@ -260,7 +259,6 @@ int TCP_TrobaAdrSockLoc(int Sck, char *IPloc, int *portTCPloc) {
 int TCP_TrobaAdrSockRem(int Sck, char *IPrem, int *portTCPrem) {
   struct sockaddr_in addr;
   uint addr_size = sizeof(addr);
-  int sock_addr;
 
   if (getpeername(Sck, (struct sockaddr *)&addr, &addr_size) == -1) {
     return -1;
