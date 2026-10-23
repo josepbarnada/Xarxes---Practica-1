@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
     // TCP_TancaSock(socket_server);
 
     printf("Vols enviar missatges a un altre servidor? [0: no |||| 1: si]: ");
-    scanf("%d", continuar);
+    scanf("%d", &continuar);
   }
 }
 
