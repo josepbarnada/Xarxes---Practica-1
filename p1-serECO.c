@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 
+#include "p1-util.h"
+
 /* Definició de constants, p.e.,                                          */
 
 /* #define XYZ       1500                                                 */
@@ -41,19 +43,6 @@ int socket_client = 0;
 
 // TODO: Check running before each call to show error
 
-void mostrarError(char *msg) {
-  int codi_error;
-  char *missatge_error = T_ObteTextRes(&codi_error);
-  printf("\n%s\nCodi errno: %d\n%s\n", msg, codi_error, missatge_error);
-}
-
-// Sets all the str to \0 a.k.a. null characters
-void zero(char *str, int size) {
-  for (int i = 0; i < size; i++) {
-    str[i] = '\0';
-  }
-}
-
 void tancarServidor(int dummy) {
   printf("Tancant sockets...\n");
 
@@ -66,10 +55,6 @@ void tancarServidor(int dummy) {
   }
 
   printf("Sockets tancats\n");
-}
-
-void mostrarSocket(char *nom, char *ip, int port) {
-  printf("\n%s:\n\tIP:\t%s\n\tPort:\t%d\n", nom, ip, port);
 }
 
 void ms2() {

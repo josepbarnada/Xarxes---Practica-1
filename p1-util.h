@@ -1,6 +1,8 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include "p1-tTCP.h"
+
 #define PECO_LINEA 'L'
 
 // Sets all the str to \0 a.k.a. null characters
