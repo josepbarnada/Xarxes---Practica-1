@@ -50,8 +50,8 @@ void zero(char *str, int size) {
 int main(int argc, char *argv[]) {
 
   printf("Entra el port del servidor: ");
-  int port_server;
-  scanf("%d", &port_server);
+  int port_server = 8000;
+  // scanf("%d", &port_server);
   printf("\nIniciant el servidor amb port: %d\n", port_server);
 
   int socket_server = TCP_CreaSockServidor(IP_serv, port_server);
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
         mostrarError("Error llegit missatge del socket client");
 
       } else if (bytes_llegits > 0) {
-        printf("Missatge rebut (%d bytes):\n%s\n", bytes_llegits, buffer);
+        printf("Missatge rebut (%d bytes):\n'%s'\n", bytes_llegits, buffer);
         // printf("Missatge rebut:\n%s\nBytes: %d\n", buffer, bytes_llegits);
 
         int bytes_enviats = TCP_Envia(socket_client, buffer, bytes_llegits);

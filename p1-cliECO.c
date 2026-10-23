@@ -37,12 +37,12 @@ int main(int argc, char *argv[]) {
   int socket_client;
 
   printf("Entra la IP del servidor: ");
-  char IP_server[IP_LONG];
-  scanf("%s", IP_server);
+  char IP_server[IP_LONG] = "192.168.1.36";
+  // scanf("%s", IP_server);
 
   printf("Entra el port del servidor: ");
-  int port_server;
-  scanf("%d", &port_server);
+  int port_server = 8000;
+  // scanf("%d", &port_server);
 
   printf("Iniciant connexio al servidor %s amb port: %d\n", IP_server,
          port_server);
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
   char buffer[bufferSize];
   int llegit = read(STDIN_FILENO, buffer, bufferSize);
 
-  for (int i = llegit-1; i < bufferSize; i++) {
+  for (int i = llegit - 1; i < bufferSize; i++) {
     buffer[i] = '\0';
   }
 
@@ -104,10 +104,10 @@ int main(int argc, char *argv[]) {
       exit(-1);
     }
     printf("Rebut: '%s' %d bytes\n", buffer, llegits);
-    
+
     llegit = read(STDIN_FILENO, buffer, bufferSize);
 
-    for (int i = llegit-1; i < bufferSize; i++) {
+    for (int i = llegit - 1; i < bufferSize; i++) {
       buffer[i] = '\0';
     }
   }
