@@ -37,8 +37,18 @@ int main(int argc, char *argv[]) {
   char *missatge_error;
   int socket_client;
 
-  char *IP_server = "192.168.1.36";
-  int port_server = 8000;
+
+  printf("Entra la IP del servidor: ");
+  char *IP_server;
+  scanf("%15s", IP_server);
+
+  printf("Entra el port del servidor: ");
+  int port_server;
+  scanf("%d", &port_server);
+
+
+  printf("Iniciant connexio al servidor %15s amb port: %d\n", IP_server, port_server);
+
 
   /* Expressions, estructures de control, crides a funcions, etc.          */
 
@@ -82,15 +92,14 @@ int main(int argc, char *argv[]) {
   
     printf("ESPERANT... rebre\n");
   
-    char buffer2[bufferSize];
     int llegits;
-    if ((llegits = TCP_Rep(socket_client, buffer2, bufferSize)) == -1){
+    if ((llegits = TCP_Rep(socket_client, buffer, bufferSize)) == -1){
       missatge_error = T_ObteTextRes(&codi_error);
       printf("Error rebent missatge: \n%s", missatge_error);
       TCP_TancaSock(socket_client);
       exit(-1);
     }
-    printf("Rebut: '%s' %d bytes\n", buffer2, llegits);
+    printf("Rebut: '%s' %d bytes\n", buffer, llegits);
 
     //pot tancar servidor aqui entremig no?? revisar tb...
 
