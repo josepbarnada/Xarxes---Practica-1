@@ -39,9 +39,9 @@ int socket_client = 0;
 
 /* int FuncioInterna(arg1, arg2...);                                      */
 
+// TODO: Check running before each call to show error
+
 void mostrarError(char *msg) {
-  if (!running)
-    return;
   int codi_error;
   char *missatge_error = T_ObteTextRes(&codi_error);
   printf("\n%s\nCodi errno: %d\n%s\n", msg, codi_error, missatge_error);
