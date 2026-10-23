@@ -26,6 +26,8 @@
 
 #define IP_serv "192.168.1.36"
 
+#define IP_LENGTH 16
+
 /* Declaració de funcions INTERNES que es fan servir en aquest fitxer     */
 /* (les  definicions d'aquestes funcions es troben més avall) per així    */
 /* fer-les conegudes des d'aquí fins al final d'aquest fitxer, p.e.,      */
@@ -36,6 +38,13 @@ void mostrarError(char *msg) {
   int codi_error;
   char *missatge_error = T_ObteTextRes(&codi_error);
   printf("%s\n%s\n", msg, missatge_error);
+}
+
+// Sets all the str to \0 a.k.a. null characters
+void zero(char *str, int size) {
+  for (int i = 0; i < size; i++) {
+    str[i] = '\0';
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -55,7 +64,7 @@ int main(int argc, char *argv[]) {
 
   while (true) {
     printf("\nEsperant connexio...\n");
-    char IP_client[15];
+    char IP_client[IP_LENGTH];
     int port_client;
     int socket_client =
         TCP_AcceptaConnexio(socket_server, IP_client, &port_client);
@@ -76,8 +85,12 @@ int main(int argc, char *argv[]) {
     int bytes_llegits;
     do {
       printf("\nEsperant missatge del client...\n");
-      char buffer[200] = {0};
-      bytes_llegits = TCP_Rep(socket_client, buffer, 200);
+      int bufferSize = 200;
+      char buffer[bufferSize];
+
+      zero(buffer, bufferSize);
+
+      bytes_llegits = TCP_Rep(socket_client, buffer, bufferSize);
 
       if (bytes_llegits == -1) {
         mostrarError("Error llegit missatge del socket client");
