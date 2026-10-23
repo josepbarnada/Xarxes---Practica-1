@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
   char buffer[bufferSize];
   int llegit = read(STDIN_FILENO, buffer, bufferSize);
 
-  for (int i = 0; i < llegit-1; i++) {
+  for (int i = i = llegit-1; i < bufferSize; i++) {
     buffer[i] = '\0';
   }
 
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
     
     llegit = read(STDIN_FILENO, buffer, bufferSize);
 
-    for (int i = 0; i < llegit-1; i++) {
+    for (int i = llegit-1; i < bufferSize; i++) {
       buffer[i] = '\0';
     }
   }
