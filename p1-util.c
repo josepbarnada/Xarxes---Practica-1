@@ -32,12 +32,13 @@ int enviarLinea(int socket, char *msg, int msgSize) {
   return bytes_enviats;
 }
 
-int rebreLinea(int socket, char *msg[], int msgSize) {
+int rebreLinea(int socket, char **msg) {
 
   char buffer[200] = {0};
 
   int bytes_rebuts = TCP_Rep(socket, buffer, 200);
 
+  int msgSize;
   getPecoInfo(buffer, bytes_rebuts, msg, &msgSize);
 
   return bytes_rebuts;

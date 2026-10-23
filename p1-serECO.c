@@ -111,25 +111,25 @@ int main(int argc, char *argv[]) {
     int bytes_llegits;
     do {
       printf("\nEsperant missatge del client...\n");
-      int bufferSize = 200;
-      char buffer[bufferSize];
+      // int bufferSize = 200;
+      // char buffer[bufferSize];
 
-      char **linea;
+      char *linea;
 
-      zero(buffer, bufferSize);
+      // zero(buffer, bufferSize);
 
-      bytes_llegits = rebreLinea(socket_client, linea, bufferSize);
-      printf("%s\n", *linea);
+      bytes_llegits = rebreLinea(socket_client, &linea);
+
       // bytes_llegits = TCP_Rep(socket_client, buffer, bufferSize);
 
       if (running && bytes_llegits == -1) {
         mostrarError("Error llegit missatge del socket client");
 
       } else if (bytes_llegits > 0) {
-        printf("Missatge rebut (%d bytes):\n'%s'\n", bytes_llegits, buffer);
+        printf("Missatge rebut (%d bytes):\n'%s'\n", bytes_llegits, linea);
         // printf("Missatge rebut:\n%s\nBytes: %d\n", buffer, bytes_llegits);
 
-        int bytes_enviats = enviarLinea(socket_client, buffer, bytes_llegits);
+        int bytes_enviats = enviarLinea(socket_client, linea, bytes_llegits);
         // int bytes_enviats = TCP_Envia(socket_client, buffer, bytes_llegits);
 
         if (running && bytes_enviats == -1) {

@@ -10,7 +10,7 @@ void zero(char *str, int size);
 void mostrarSocket(char *nom, char *ip, int port);
 void mostrarError(char *msg);
 
-int rebreLinea(int socket, char *msg[], int msgSize);
+int rebreLinea(int socket, char **msg);
 int enviarLinea(int socket, char *msg, int msgSize);
 void formatToPeco(char *info, int infoSize, char tipus, char *paquet[],
                   int *paquetSize);
