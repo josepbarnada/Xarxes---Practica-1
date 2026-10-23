@@ -90,10 +90,6 @@ int main(int argc, char *argv[]) {
               printf("Error enviant missatge: \n%s", missatge_error);
               TCP_TancaSock(socket_client);
               exit(-1);
-            } else if (enviat == 0) {
-              printf("El servidor ha tancat la connexió");
-              TCP_TancaSock(socket_client);
-              exit(-1);
             }
             printf("Enviat: '%s' %d bytes\n", buffer, enviat);
             
@@ -103,6 +99,10 @@ int main(int argc, char *argv[]) {
     if ((llegits = TCP_Rep(socket_client, buffer, bufferSize)) == -1) {
       missatge_error = T_ObteTextRes(&codi_error);
       printf("Error rebent missatge: \n%s", missatge_error);
+      TCP_TancaSock(socket_client);
+      exit(-1);
+    } else if (enviat == 0) {
+      printf("El servidor ha tancat la connexió");
       TCP_TancaSock(socket_client);
       exit(-1);
     }
