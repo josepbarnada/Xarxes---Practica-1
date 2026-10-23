@@ -13,6 +13,7 @@
 /* Inclusió de llibreries, p.e. #include <stdio.h> o #include "meu.h"     */
 
 #include "p1-tTCP.h"
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,9 +25,13 @@
 #define true 1
 #define false 0
 
-#define IP_serv "192.168.1.36"
+#define IP_serv "0.0.0.0"
 
 #define IP_LENGTH 16
+
+int running = true;
+int socket_server = 0;
+int socket_client = 0;
 
 /* Declaració de funcions INTERNES que es fan servir en aquest fitxer     */
 /* (les  definicions d'aquestes funcions es troben més avall) per així    */
@@ -35,9 +40,11 @@
 /* int FuncioInterna(arg1, arg2...);                                      */
 
 void mostrarError(char *msg) {
+  if (!running)
+    return;
   int codi_error;
   char *missatge_error = T_ObteTextRes(&codi_error);
-  printf("%s\n%s\n", msg, missatge_error);
+  printf("\n%s\nCodi errno: %d\n%s\n", msg, codi_error, missatge_error);
 }
 
 // Sets all the str to \0 a.k.a. null characters
@@ -47,14 +54,30 @@ void zero(char *str, int size) {
   }
 }
 
+void tancarServidor(int dummy) {
+  printf("Tancant sockets...\n");
+
+  running = false;
+  if (socket_server > 0) {
+    TCP_TancaSock(socket_server);
+  }
+  if (socket_client > 0) {
+    TCP_TancaSock(socket_client);
+  }
+
+  printf("Sockets tancats\n");
+}
+
 int main(int argc, char *argv[]) {
+
+  signal(SIGINT, tancarServidor);
 
   printf("Entra el port del servidor: ");
   int port_server = 8000;
   // scanf("%d", &port_server);
   printf("\nIniciant el servidor amb port: %d\n", port_server);
 
-  int socket_server = TCP_CreaSockServidor(IP_serv, port_server);
+  socket_server = TCP_CreaSockServidor(IP_serv, port_server);
   if (socket_server == -1) {
     mostrarError("Error creant socket");
     TCP_TancaSock(socket_server);
@@ -62,12 +85,11 @@ int main(int argc, char *argv[]) {
   }
   printf("Servidor iniciat correctament\n");
 
-  while (true) {
+  while (running) {
     printf("\nEsperant connexio...\n");
     char IP_client[IP_LENGTH];
     int port_client;
-    int socket_client =
-        TCP_AcceptaConnexio(socket_server, IP_client, &port_client);
+    socket_client = TCP_AcceptaConnexio(socket_server, IP_client, &port_client);
 
     if (socket_client == -1) {
       mostrarError("Error acceptant connexio");
