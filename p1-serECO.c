@@ -118,7 +118,8 @@ int main(int argc, char *argv[]) {
 
       // zero(buffer, bufferSize);
 
-      bytes_llegits = rebreLinea(socket_client, &linea);
+      int mida_linea;
+      bytes_llegits = rebreLinea(socket_client, &linea, &mida_linea);
 
       // bytes_llegits = TCP_Rep(socket_client, buffer, bufferSize);
 
@@ -129,7 +130,7 @@ int main(int argc, char *argv[]) {
         printf("Missatge rebut (%d bytes):\n'%s'\n", bytes_llegits, linea);
         // printf("Missatge rebut:\n%s\nBytes: %d\n", buffer, bytes_llegits);
 
-        int bytes_enviats = enviarLinea(socket_client, linea, bytes_llegits);
+        int bytes_enviats = enviarLinea(socket_client, linea, mida_linea);
         // int bytes_enviats = TCP_Envia(socket_client, buffer, bytes_llegits);
 
         if (running && bytes_enviats == -1) {

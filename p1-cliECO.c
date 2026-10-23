@@ -83,13 +83,15 @@ int main(int argc, char *argv[]) {
     char buffer[bufferSize];
     int llegit = read(STDIN_FILENO, buffer, bufferSize);
 
+    char *linea;
+
     buffer[llegit - 1] = '\0';
 
     while (llegit > 0 && strcmp(buffer, "EOF") != 0) {
 
       printf("Per Enviar: '%s' %d bytes\n", buffer, llegit);
       int enviat;
-      if ((enviat = TCP_Envia(socket_client, buffer, llegit)) == -1) {
+      if ((enviat = enviarLinea(socket_client, buffer, llegit)) == -1) {
         missatge_error = T_ObteTextRes(&codi_error);
         printf("Error enviant missatge: \n%s", missatge_error);
         TCP_TancaSock(socket_client);
@@ -99,8 +101,9 @@ int main(int argc, char *argv[]) {
 
       printf("ESPERANT... rebre\n");
 
+      int mida_linea;
       int llegits;
-      if ((llegits = TCP_Rep(socket_client, buffer, bufferSize)) == -1) {
+      if ((llegits = rebreLinea(socket_client, &linea, &mida_linea)) == -1) {
         missatge_error = T_ObteTextRes(&codi_error);
         printf("Error rebent missatge: \n%s", missatge_error);
         TCP_TancaSock(socket_client);
@@ -110,6 +113,7 @@ int main(int argc, char *argv[]) {
         TCP_TancaSock(socket_client);
         break; // pq l'usuari es pugui connectar a un altre server si vol
       }
+      strncpy(buffer, linea, bufferSize);
       printf("Rebut: '%s' %d bytes\n", buffer, llegits);
 
       llegit = read(STDIN_FILENO, buffer, bufferSize);
