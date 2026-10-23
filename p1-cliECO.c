@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 
 
   printf("Entra la IP del servidor: ");
-  char *IP_server;
+  char IP_server[15];
   scanf("%15s", IP_server);
 
   printf("Entra el port del servidor: ");
