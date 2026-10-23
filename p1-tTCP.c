@@ -174,8 +174,8 @@ int TCP_AcceptaConnexio(int Sck, char *IPrem, int *portTCPrem) {
     return -1;
   }
 
-  IPrem = inet_ntoa(add_rem.sin_addr);
-  portTCPrem = (int *)ntohs(add_rem.sin_port);
+  strcpy(IPrem, inet_ntoa(add_rem.sin_addr));
+  *portTCPrem = ntohs(add_rem.sin_port);
 
   return sock_conn;
 }
@@ -242,8 +242,8 @@ int TCP_TrobaAdrSockLoc(int Sck, char *IPloc, int *portTCPloc) {
     return -1;
   };
 
-  IPloc = inet_ntoa(addr.sin_addr);
-  portTCPloc = (int *)ntohs(addr.sin_port);
+  strcpy(IPloc, inet_ntoa(addr.sin_addr));
+  *portTCPloc = ntohs(addr.sin_port);
   return 0;
 }
 
@@ -266,8 +266,8 @@ int TCP_TrobaAdrSockRem(int Sck, char *IPrem, int *portTCPrem) {
     return -1;
   };
 
-  IPrem = inet_ntoa(addr.sin_addr);
-  portTCPrem = (int *)ntohs(addr.sin_port);
+  strcpy(IPrem, inet_ntoa(addr.sin_addr));
+  *portTCPrem = ntohs(addr.sin_port);
   return 0;
 }
 

@@ -51,9 +51,11 @@ int main(int argc, char *argv[]) {
     TCP_TancaSock(socket_server);
     exit(-1);
   }
+  printf("Servidor iniciat correctament\n");
 
   while (true) {
-    char *IP_client;
+    printf("Esperant connexio\n");
+    char IP_client[15];
     int port_client;
     int socket_client =
         TCP_AcceptaConnexio(socket_server, IP_client, &port_client);
@@ -71,7 +73,7 @@ int main(int argc, char *argv[]) {
     // Aixo no es true pero no ser com es per comprovar que el socket client
     // tingui connectivitat
     while (true) {
-      char buffer[200];
+      char buffer[200] = {0};
       int bytes_llegits = TCP_Rep(socket_client, buffer, 200);
 
       if (bytes_llegits == -1) {
