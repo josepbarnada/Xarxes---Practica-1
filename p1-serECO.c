@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
   printf("Entra el port del servidor: ");
   int port_server;
   scanf("%d", &port_server);
-  printf("Iniciant el servidor amb port: %d\n", port_server);
+  printf("\nIniciant el servidor amb port: %d\n", port_server);
 
   int socket_server = TCP_CreaSockServidor(IP, port_server);
   if (socket_server == -1) {
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
   printf("Servidor iniciat correctament\n");
 
   while (true) {
-    printf("Esperant connexio\n");
+    printf("\nEsperant connexio...\n");
     char IP_client[15];
     int port_client;
     int socket_client =
@@ -65,30 +65,36 @@ int main(int argc, char *argv[]) {
       TCP_TancaSock(socket_client);
       continue;
     }
-    printf("Connexio acceptada\n");
-    printf("Server (socket local):\n\tIP:\t%s\n\tPort:\t%d\n", IP, port_server);
-    printf("Client (socket remot):\n\tIP:\t%s\n\tPort:\t%d\n", IP_client,
+    printf("Connexio acceptada:\n");
+    printf("\nServer (socket local):\n\tIP:\t%s\n\tPort:\t%d\n", IP,
+           port_server);
+    printf("\nClient (socket remot):\n\tIP:\t%s\n\tPort:\t%d\n", IP_client,
            port_client);
 
     // Aixo no es true pero no ser com es per comprovar que el socket client
     // tingui connectivitat
-    while (true) {
+    int bytes_llegits;
+    do {
+      printf("\nEsperant missatge del client...\n");
       char buffer[200] = {0};
-      int bytes_llegits = TCP_Rep(socket_client, buffer, 200);
+      bytes_llegits = TCP_Rep(socket_client, buffer, 200);
 
       if (bytes_llegits == -1) {
         mostrarError("Error llegit missatge del socket client");
 
-      } else {
-        printf("Linea rebuda:\n%s\nBytes:%d\n", buffer, bytes_llegits);
+      } else if (bytes_llegits > 0) {
+        printf("Missatge rebut (%d bytes):\n%s\n", bytes_llegits, buffer);
+        // printf("Missatge rebut:\n%s\nBytes: %d\n", buffer, bytes_llegits);
 
         int bytes_enviats = TCP_Envia(socket_client, buffer, bytes_llegits);
 
         if (bytes_enviats == -1) {
           mostrarError("Error enviant missatge al socket client");
         }
+      } else {
+        printf("El client ha tencat la connexio...\n");
       }
-    }
+    } while (bytes_llegits > 0);
   }
 
   /* Declaració de variables, p.e., int n;                                 */
