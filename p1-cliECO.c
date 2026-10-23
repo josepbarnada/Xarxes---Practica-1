@@ -15,15 +15,14 @@
 #include "p1-tTCP.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-
+#include <unistd.h>
 
 /* Definició de constants, p.e.,                                          */
 char IPloc[] = "0.0.0.0"; // nose si esta be.. pero es la idea maomeno
 int portTCPloc = 0;
 /* #define XYZ       1500                                                 */
-  #define IP_LONG 16
+#define IP_LONG 16
 /* Declaració de funcions INTERNES que es fan servir en aquest fitxer     */
 /* (les  definicions d'aquestes funcions es troben més avall) per així    */
 /* fer-les conegudes des d'aquí fins al final d'aquest fitxer, p.e.,      */
@@ -37,7 +36,6 @@ int main(int argc, char *argv[]) {
   char *missatge_error;
   int socket_client;
 
-
   printf("Entra la IP del servidor: ");
   char IP_server[IP_LONG];
   scanf("%s", IP_server);
@@ -46,9 +44,8 @@ int main(int argc, char *argv[]) {
   int port_server;
   scanf("%d", &port_server);
 
-
-  printf("Iniciant connexio al servidor %s amb port: %d\n", IP_server, port_server);
-
+  printf("Iniciant connexio al servidor %s amb port: %d\n", IP_server,
+         port_server);
 
   /* Expressions, estructures de control, crides a funcions, etc.          */
 
@@ -73,41 +70,46 @@ int main(int argc, char *argv[]) {
 
   // TCP_TrobaAdrSockRem(socket_server, ipServer, &portServ);
 
-
   int bufferSize = 200;
   char buffer[bufferSize];
   int llegit = read(STDIN_FILENO, buffer, bufferSize);
 
-  while(strcmp(buffer, "EOF\n") != 0){
+  while (strcmp(buffer, "EOF\n") != 0) {
 
     printf("Per Enviar: '%s' %d bytes\n", buffer, llegit);
     int enviat;
-    if ((enviat = TCP_Envia(socket_client, buffer, llegit)) == -1){
+    if ((enviat = TCP_Envia(socket_client, buffer, llegit)) == -1) {
       missatge_error = T_ObteTextRes(&codi_error);
       printf("Error enviant missatge: \n%s", missatge_error);
       TCP_TancaSock(socket_client);
       exit(-1);
-    } else if (enviat == 0){
+    } else if (enviat == 0) {
       printf("El servidor ha tancat la connexió");
       TCP_TancaSock(socket_client);
       exit(-1);
     }
     printf("Enviat: '%s' %d bytes\n", buffer, enviat);
-  
+
+    for (int i = 0; i < bufferSize; i++) {
+      buffer[i] = '\0';
+    }
+
     printf("ESPERANT... rebre\n");
-  
+
     int llegits;
-    if ((llegits = TCP_Rep(socket_client, buffer, bufferSize)) == -1){
+    if ((llegits = TCP_Rep(socket_client, buffer, bufferSize)) == -1) {
       missatge_error = T_ObteTextRes(&codi_error);
       printf("Error rebent missatge: \n%s", missatge_error);
       TCP_TancaSock(socket_client);
       exit(-1);
     }
     printf("Rebut: '%s' %d bytes\n", buffer, llegits);
+    for (int i = 0; i < bufferSize; i++) {
+      buffer[i] = '\0';
+    }
 
     llegit = read(STDIN_FILENO, buffer, bufferSize);
   }
-
 
   printf("Tancants sockets...\n");
 
