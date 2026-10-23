@@ -10,9 +10,11 @@ void zero(char *str, int size);
 void mostrarSocket(char *nom, char *ip, int port);
 void mostrarError(char *msg);
 
-void formatToPeco(char *info, int infoSize, char tipus, char *msg,
-                  int *msgSize);
+int rebreLinea(int socket, char *msg[], int msgSize);
+int enviarLinea(int socket, char *msg, int msgSize);
+void formatToPeco(char *info, int infoSize, char tipus, char *paquet[],
+                  int *paquetSize);
 
-void getPecoInfo(char *msg, int *msgSize, char *info, int infoSize);
+void getPecoInfo(char *paquet, int paquetSize, char *info[], int *infoSize);
 
 #endif

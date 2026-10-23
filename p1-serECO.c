@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
   printf("\nIniciant el servidor amb port: %d\n", port_server);
 
   socket_server = TCP_CreaSockServidor(IP_serv, port_server);
-  if (socket_server == -1) {
+  if (running && socket_server == -1) {
     mostrarError("Error creant socket");
     TCP_TancaSock(socket_server);
     exit(-1);
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
     int port_client;
     socket_client = TCP_AcceptaConnexio(socket_server, IP_client, &port_client);
 
-    if (socket_client == -1) {
+    if (running && socket_client == -1) {
       mostrarError("Error acceptant connexio");
       TCP_TancaSock(socket_client);
       continue;
@@ -114,20 +114,25 @@ int main(int argc, char *argv[]) {
       int bufferSize = 200;
       char buffer[bufferSize];
 
+      char **linea;
+
       zero(buffer, bufferSize);
 
-      bytes_llegits = TCP_Rep(socket_client, buffer, bufferSize);
+      bytes_llegits = rebreLinea(socket_client, linea, bufferSize);
+      printf("%s\n", *linea);
+      // bytes_llegits = TCP_Rep(socket_client, buffer, bufferSize);
 
-      if (bytes_llegits == -1) {
+      if (running && bytes_llegits == -1) {
         mostrarError("Error llegit missatge del socket client");
 
       } else if (bytes_llegits > 0) {
         printf("Missatge rebut (%d bytes):\n'%s'\n", bytes_llegits, buffer);
         // printf("Missatge rebut:\n%s\nBytes: %d\n", buffer, bytes_llegits);
 
-        int bytes_enviats = TCP_Envia(socket_client, buffer, bytes_llegits);
+        int bytes_enviats = enviarLinea(socket_client, buffer, bytes_llegits);
+        // int bytes_enviats = TCP_Envia(socket_client, buffer, bytes_llegits);
 
-        if (bytes_enviats == -1) {
+        if (running && bytes_enviats == -1) {
           mostrarError("Error enviant missatge al socket client");
         }
       } else {

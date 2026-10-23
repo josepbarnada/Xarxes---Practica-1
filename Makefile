@@ -5,10 +5,10 @@ CFLAGS =
 all: server client
 
 server: p1-serECO.c p1-tTCP.c
-	$(CC) $(CFLAGS) -o server-eco p1-serECO.c p1-tTCP.c
+	$(CC) $(CFLAGS) -o server-eco p1-serECO.c p1-tTCP.c p1-util.c
 
 client: p1-cliECO.c p1-tTCP.c
-	$(CC) $(CFLAGS) -o client-eco p1-cliECO.c p1-tTCP.c
+	$(CC) $(CFLAGS) -o client-eco p1-cliECO.c p1-tTCP.c p1-util.c
 
 clean:
 	rm -f client-eco server-eco
