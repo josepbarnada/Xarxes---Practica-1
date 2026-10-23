@@ -23,7 +23,7 @@
 char IPloc[] = "0.0.0.0"; // nose si esta be.. pero es la idea maomeno
 int portTCPloc = 0;
 /* #define XYZ       1500                                                 */
-
+  #define IP_LONG 16
 /* Declaració de funcions INTERNES que es fan servir en aquest fitxer     */
 /* (les  definicions d'aquestes funcions es troben més avall) per així    */
 /* fer-les conegudes des d'aquí fins al final d'aquest fitxer, p.e.,      */
@@ -39,15 +39,15 @@ int main(int argc, char *argv[]) {
 
 
   printf("Entra la IP del servidor: ");
-  char IP_server[15];
-  scanf("%15s", IP_server);
+  char IP_server[IP_LONG];
+  scanf("%s", IP_server);
 
   printf("Entra el port del servidor: ");
   int port_server;
   scanf("%d", &port_server);
 
 
-  printf("Iniciant connexio al servidor %15s amb port: %d\n", IP_server, port_server);
+  printf("Iniciant connexio al servidor %s amb port: %d\n", IP_server, port_server);
 
 
   /* Expressions, estructures de control, crides a funcions, etc.          */
