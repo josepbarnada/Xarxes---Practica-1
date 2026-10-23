@@ -46,7 +46,7 @@ int rebreLinea(int socket, char **msg, int *msgSize) {
 void formatToPeco(char *info, int infoSize, char tipus, char *paquet[],
                   int *paquetSize) {
 
-  // 2 bytes el de el tipus i el del '\0'
+  // 1 bytes el de el tipus
   *paquetSize = infoSize + 1;
 
   char *msg = (char *)malloc(*paquetSize);
@@ -59,6 +59,7 @@ void formatToPeco(char *info, int infoSize, char tipus, char *paquet[],
 }
 
 void getPecoInfo(char *paquet, int paquetSize, char *info[], int *infoSize) {
+  // treiem el byte del tipus de paquet
   *infoSize = paquetSize - 1;
 
   char *msg = (char *)malloc(*infoSize);
