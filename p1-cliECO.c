@@ -74,6 +74,10 @@ int main(int argc, char *argv[]) {
   char buffer[bufferSize];
   int llegit = read(STDIN_FILENO, buffer, bufferSize);
 
+  for (int i = 0; i < llegit-1; i++) {
+    buffer[i] = '\0';
+  }
+
   while (strcmp(buffer, "EOF\n") != 0) {
 
     printf("Per Enviar: '%s' %d bytes\n", buffer, llegit);
@@ -90,10 +94,6 @@ int main(int argc, char *argv[]) {
     }
     printf("Enviat: '%s' %d bytes\n", buffer, enviat);
 
-    for (int i = 0; i < bufferSize; i++) {
-      buffer[i] = '\0';
-    }
-
     printf("ESPERANT... rebre\n");
 
     int llegits;
@@ -104,11 +104,12 @@ int main(int argc, char *argv[]) {
       exit(-1);
     }
     printf("Rebut: '%s' %d bytes\n", buffer, llegits);
-    for (int i = 0; i < bufferSize; i++) {
+    
+    llegit = read(STDIN_FILENO, buffer, bufferSize);
+
+    for (int i = 0; i < llegit-1; i++) {
       buffer[i] = '\0';
     }
-
-    llegit = read(STDIN_FILENO, buffer, bufferSize);
   }
 
   printf("Tancants sockets...\n");
