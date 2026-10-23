@@ -16,7 +16,6 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/socket.h>
 
 /* Definició de constants, p.e.,                                          */
@@ -124,8 +123,6 @@ int main(int argc, char *argv[]) {
     //
     // ms2();
 
-    // Aixo no es true pero no ser com es per comprovar que el socket client
-    // tingui connectivitat
     int bytes_llegits;
     do {
       printf("\nEsperant missatge del client...\n");
