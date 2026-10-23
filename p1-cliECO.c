@@ -33,6 +33,7 @@ int portTCPloc = 0;
 int main(int argc, char *argv[]) {
   /* Declaració de variables, p.e., int n;                                 */
   int continuar = 1;
+  char *linea;
 
   while (continuar) {
 
@@ -83,8 +84,6 @@ int main(int argc, char *argv[]) {
     char buffer[bufferSize];
     int llegit = read(STDIN_FILENO, buffer, bufferSize);
 
-    char *linea;
-
     buffer[llegit - 1] = '\0';
 
     while (llegit > 0 && strcmp(buffer, "EOF") != 0) {
@@ -129,6 +128,8 @@ int main(int argc, char *argv[]) {
     printf("Vols enviar missatges a un altre servidor? [0: no |||| 1: si]: ");
     scanf("%d", &continuar);
   }
+
+  free(linea);
 }
 
 /* Definició de funcions INTERNES, és a dir, d'aquelles que es faran      */
