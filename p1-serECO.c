@@ -106,10 +106,10 @@ int main(int argc, char *argv[]) {
     mostrarSocket("Server (socket local)", IP_serv, port_server);
     mostrarSocket("Client (socket remot)", IP_client, port_client);
 
-    // Funcio per fer la millor senzilla 2 decomentar en cas que es vulgui mirar
-    // el contingut dels 2 sockets del servidor.
+    // Funcio per fer la millor senzilla 1 descomentar en cas que es vulgui
+    // mirar el contingut dels 2 sockets del servidor.
     //
-    // ms2();
+    // ms1();
 
     int bytes_llegits;
     do {
