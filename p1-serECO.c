@@ -71,7 +71,7 @@ void ms1() {
 }
 
 int main(int argc, char *argv[]) {
-  char *linea;
+  char *linea = NULL;
 
   signal(SIGINT, tancarServidor);
 
@@ -93,8 +93,10 @@ int main(int argc, char *argv[]) {
     char IP_client[IP_LENGTH];
     int port_client;
     socket_client = TCP_AcceptaConnexio(socket_server, IP_client, &port_client);
+    if (!running)
+      continue;
 
-    if (running && socket_client == -1) {
+    if (socket_client == -1) {
       mostrarError("Error acceptant connexio");
       TCP_TancaSock(socket_client);
       continue;
@@ -115,25 +117,31 @@ int main(int argc, char *argv[]) {
 
       int mida_linea;
       bytes_llegits = rebreLinea(socket_client, &linea, &mida_linea);
+      if (!running)
+        continue;
 
-      if (running && bytes_llegits == -1) {
+      if (bytes_llegits == -1) {
         mostrarError("Error llegit missatge del socket client");
 
       } else if (bytes_llegits > 0) {
         printf("Missatge rebut (%d bytes):\n'%s'\n", bytes_llegits, linea);
 
         int bytes_enviats = enviarLinea(socket_client, linea, mida_linea);
+        if (!running)
+          continue;
 
-        if (running && bytes_enviats == -1) {
+        if (bytes_enviats == -1) {
           mostrarError("Error enviant missatge al socket client");
         }
       } else {
         printf("El client ha tencat la connexio...\n");
       }
-    } while (bytes_llegits > 0);
+    } while (running && bytes_llegits > 0);
   }
 
-  free(linea);
+  if (linea != NULL) {
+    free(linea);
+  }
 
   /* Declaració de variables, p.e., int n;                                 */
   /* Expressions, estructures de control, crides a funcions, etc.          */

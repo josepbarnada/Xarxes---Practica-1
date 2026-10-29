@@ -39,7 +39,10 @@ int rebreLinea(int socket, char **msg, int *msgSize) {
 
   int bytes_rebuts = TCP_Rep(socket, buffer, 200);
 
-  getPecoInfo(buffer, bytes_rebuts, msg, msgSize);
+  if (bytes_rebuts > 0) {
+
+    getPecoInfo(buffer, bytes_rebuts, msg, msgSize);
+  }
 
   return bytes_rebuts;
 }
