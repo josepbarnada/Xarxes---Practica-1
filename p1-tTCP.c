@@ -58,6 +58,7 @@
 int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
   struct sockaddr_in adrloc;
   int sock_cli;
+  int i;
 
   // Primer cridem el socket (local)
   if ((sock_cli = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
@@ -67,7 +68,7 @@ int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
   adrloc.sin_family = AF_INET;
   adrloc.sin_port = htons(portTCPloc);
   adrloc.sin_addr.s_addr = inet_addr(IPloc);
-  for (int i = 0; i < 8; i++) {
+  for (i = 0; i < 8; i++) {
     adrloc.sin_zero[i] = '\0';
   }
 
@@ -92,6 +93,7 @@ int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
 int TCP_CreaSockServidor(const char *IPloc, int portTCPloc) {
   struct sockaddr_in adrloc;
   int sock_serv;
+  int i;
 
   if ((sock_serv = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     return -1;
@@ -102,7 +104,7 @@ int TCP_CreaSockServidor(const char *IPloc, int portTCPloc) {
   adrloc.sin_family = AF_INET;
   adrloc.sin_port = htons(portTCPloc);
   adrloc.sin_addr.s_addr = inet_addr(IPloc);
-  for (int i = 0; i < 8; i++) {
+  for (i = 0; i < 8; i++) {
     adrloc.sin_zero[i] = '\0';
   }
 
@@ -132,11 +134,12 @@ int TCP_CreaSockServidor(const char *IPloc, int portTCPloc) {
 /* -1 si hi ha error.                                                     */
 int TCP_DemanaConnexio(int Sck, const char *IPrem, int portTCPrem) {
   struct sockaddr_in server_addr;
+  int i;
 
   server_addr.sin_port = htons(portTCPrem);
   server_addr.sin_addr.s_addr = inet_addr(IPrem);
   server_addr.sin_family = AF_INET;
-  for (int i = 0; i < 8; i++) {
+  for (i = 0; i < 8; i++) {
     server_addr.sin_zero[i] = 0;
   }
 

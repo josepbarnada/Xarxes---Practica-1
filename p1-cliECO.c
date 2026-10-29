@@ -43,11 +43,11 @@ int main(int argc, char *argv[]) {
 
     printf("Entra la IP del servidor: ");
     char IP_server[IP_LONG] = "192.168.1.36";
-    // scanf("%s", IP_server);
+    scanf("%s", IP_server);
 
     printf("Entra el port del servidor: ");
     int port_server = 8000;
-    // scanf("%d", &port_server);
+    scanf("%d", &port_server);
 
     printf("Iniciant connexio al servidor %s amb port: %d\n", IP_server,
            port_server);

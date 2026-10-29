@@ -27,7 +27,7 @@
 #define true 1
 #define false 0
 
-#define IP_serv "192.168.1.36"
+#define IP_serv "0.0.0.0"
 
 #define IP_LENGTH 16
 
@@ -57,14 +57,14 @@ void tancarServidor(int dummy) {
   printf("Sockets tancats\n");
 }
 
-void ms2() {
+void ms1() {
   char ip_serv[IP_LENGTH], ip_client[IP_LENGTH];
   int port_serv, port_client;
 
   TCP_TrobaAdrSockLoc(socket_server, ip_serv, &port_serv);
   TCP_TrobaAdrSockLoc(socket_client, ip_client, &port_client);
 
-  printf("\n========= Millor Senzilla 2 ==========\n");
+  printf("\n========= Millor Senzilla 1 ==========\n");
   mostrarSocket("Socket server", ip_serv, port_serv);
   mostrarSocket("Socket client", ip_client, port_client);
   printf("\n======================================\n");
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 
   printf("Entra el port del servidor: ");
   int port_server = 8000;
-  // scanf("%d", &port_server);
+  scanf("%d", &port_server);
   printf("\nIniciant el servidor amb port: %d\n", port_server);
 
   socket_server = TCP_CreaSockServidor(IP_serv, port_server);

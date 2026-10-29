@@ -10,7 +10,8 @@ void mostrarError(char *msg) {
 }
 
 void zero(char *str, int size) {
-  for (int i = 0; i < size; i++) {
+  int i;
+  for (i = 0; i < size; i++) {
     str[i] = '\0';
   }
 }
