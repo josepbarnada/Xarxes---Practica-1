@@ -56,16 +56,14 @@ int main(int argc, char *argv[]) {
 
     socket_client = TCP_CreaSockClient(IPloc, portTCPloc);
     if (socket_client == -1) {
-      missatge_error = T_ObteTextRes(&codi_error);
-      printf("Error creant socket client:\n%s", missatge_error);
+      mostrarError("Error creant socket client");
       TCP_TancaSock(socket_client);
       exit(-1);
     }
 
     if ((TCP_DemanaConnexio(socket_client, IP_server, port_server)) == -1) {
       TCP_TancaSock(socket_client);
-      missatge_error = T_ObteTextRes(&codi_error);
-      printf("Error demanant connexió server:\n%s", missatge_error);
+      mostrarError("Error demanant connexió server");
       exit(-1);
     };
 
@@ -91,8 +89,7 @@ int main(int argc, char *argv[]) {
       printf("Per Enviar: '%s' %d bytes\n", buffer, llegit);
       int enviat;
       if ((enviat = enviarLinea(socket_client, buffer, llegit)) == -1) {
-        missatge_error = T_ObteTextRes(&codi_error);
-        printf("Error enviant missatge: \n%s", missatge_error);
+        mostrarError("Error enviant missatges");
         TCP_TancaSock(socket_client);
         exit(-1);
       }
@@ -103,8 +100,7 @@ int main(int argc, char *argv[]) {
       int mida_linea;
       int llegits;
       if ((llegits = rebreLinea(socket_client, &linea, &mida_linea)) == -1) {
-        missatge_error = T_ObteTextRes(&codi_error);
-        printf("Error rebent missatge: \n%s", missatge_error);
+        mostrarError("Error rebent missatges");
         TCP_TancaSock(socket_client);
         exit(-1);
       } else if (llegits == 0) {
