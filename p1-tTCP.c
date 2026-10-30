@@ -17,7 +17,6 @@
 
 #include "p1-tTCP.h"
 
-#include <stdio.h>
 #include <string.h>
 
 #include <arpa/inet.h>
@@ -54,7 +53,6 @@
 /* Retorna:                                                               */
 /*  l'identificador del socket creat si tot va bé;                        */
 /* -1 si hi ha error.                                                     */
-
 int TCP_CreaSockClient(const char *IPloc, int portTCPloc) {
   struct sockaddr_in adrloc;
   int sock_cli;
@@ -94,11 +92,12 @@ int TCP_CreaSockServidor(const char *IPloc, int portTCPloc) {
   struct sockaddr_in adrloc;
   int sock_serv;
   int i;
+  int opt;
 
   if ((sock_serv = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
     return -1;
   }
-  int opt = 1;
+  opt = 1;
   setsockopt(sock_serv, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
   adrloc.sin_family = AF_INET;

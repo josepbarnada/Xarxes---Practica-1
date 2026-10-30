@@ -28,9 +28,9 @@
 #define false 0
 
 #define IP_serv "0.0.0.0"
-
 #define IP_LENGTH 16
 
+/* Variables globals                                                      */
 int running = true;
 int socket_server = 0;
 int socket_client = 0;
@@ -41,42 +41,26 @@ int socket_client = 0;
 
 /* int FuncioInterna(arg1, arg2...);                                      */
 
-// TODO: Check running before each call to show error
-
-void tancarServidor(int dummy) {
-  printf("Tancant sockets...\n");
-
-  running = false;
-  if (socket_server > 0) {
-    TCP_TancaSock(socket_server);
-  }
-  if (socket_client > 0) {
-    TCP_TancaSock(socket_client);
-  }
-
-  printf("Sockets tancats\n");
-}
-
-void ms1() {
-  char ip_serv[IP_LENGTH], ip_client[IP_LENGTH];
-  int port_serv, port_client;
-
-  TCP_TrobaAdrSockLoc(socket_server, ip_serv, &port_serv);
-  TCP_TrobaAdrSockLoc(socket_client, ip_client, &port_client);
-
-  printf("\n========= Millor Senzilla 1 ==========\n");
-  mostrarSocket("Socket server", ip_serv, port_serv);
-  mostrarSocket("Socket client", ip_client, port_client);
-  printf("\n======================================\n");
-}
+void tancarServidor(int dummy);
+void ms1();
 
 int main(int argc, char *argv[]) {
+  /* Declaració de variables, p.e., int n;                                 */
+
   char *linea = NULL;
+  int port_server;
+  char IP_client[IP_LENGTH];
+  int port_client;
+  int bytes_llegits;
+  int mida_linea;
+  int bytes_enviats;
+
+  /* Expressions, estructures de control, crides a funcions, etc.          */
 
   signal(SIGINT, tancarServidor);
 
   printf("Entra el port del servidor: ");
-  int port_server = 8000;
+  port_server = 8000;
   scanf("%d", &port_server);
   printf("\nIniciant el servidor amb port: %d\n", port_server);
 
@@ -90,8 +74,6 @@ int main(int argc, char *argv[]) {
 
   while (running) {
     printf("\nEsperant connexio...\n");
-    char IP_client[IP_LENGTH];
-    int port_client;
     socket_client = TCP_AcceptaConnexio(socket_server, IP_client, &port_client);
     if (!running)
       continue;
@@ -108,14 +90,12 @@ int main(int argc, char *argv[]) {
 
     // Funcio per fer la millor senzilla 1 descomentar en cas que es vulgui
     // mirar el contingut dels 2 sockets del servidor.
-    //
-    // ms1();
 
-    int bytes_llegits;
+    ms1();
+
     do {
       printf("\nEsperant missatge del client...\n");
 
-      int mida_linea;
       bytes_llegits = rebreLinea(socket_client, &linea, &mida_linea);
       if (!running)
         continue;
@@ -126,7 +106,7 @@ int main(int argc, char *argv[]) {
       } else if (bytes_llegits > 0) {
         printf("Missatge rebut (%d bytes):\n'%s'\n", bytes_llegits, linea);
 
-        int bytes_enviats = enviarLinea(socket_client, linea, mida_linea);
+        bytes_enviats = enviarLinea(socket_client, linea, mida_linea);
         if (!running)
           continue;
 
@@ -142,9 +122,6 @@ int main(int argc, char *argv[]) {
   if (linea != NULL) {
     free(linea);
   }
-
-  /* Declaració de variables, p.e., int n;                                 */
-  /* Expressions, estructures de control, crides a funcions, etc.          */
 }
 
 /* Definició de funcions INTERNES, és a dir, d'aquelles que es faran      */
@@ -156,3 +133,36 @@ int main(int argc, char *argv[]) {
 {
 
 } */
+
+// Funcio que tenca els sockets del servidor, aquesta funcio nomes s'hauria de
+// cridar mitjançant el signal interrupt
+void tancarServidor(int dummy) {
+  printf("Tancant sockets...\n");
+
+  running = false;
+  if (socket_server > 0) {
+    TCP_TancaSock(socket_server);
+  }
+  if (socket_client > 0) {
+    TCP_TancaSock(socket_client);
+  }
+
+  printf("Sockets tancats\n");
+}
+
+// Funcio per mostrar per pantalla els sockets per realitzar la millora senzilla
+// 1
+//
+// Mostra els sockets locals que té el servidor
+void ms1() {
+  char ip_serv[IP_LENGTH], ip_client[IP_LENGTH];
+  int port_serv, port_client;
+
+  TCP_TrobaAdrSockLoc(socket_server, ip_serv, &port_serv);
+  TCP_TrobaAdrSockLoc(socket_client, ip_client, &port_client);
+
+  printf("\n========= Millor Senzilla 1 ==========\n");
+  mostrarSocket("Socket server", ip_serv, port_serv);
+  mostrarSocket("Socket client", ip_client, port_client);
+  printf("\n======================================\n");
+}

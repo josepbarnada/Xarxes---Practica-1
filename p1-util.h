@@ -5,8 +5,6 @@
 
 #define PECO_LINEA 'L'
 
-// Sets all the str to \0 a.k.a. null characters
-void zero(char *str, int size);
 void mostrarSocket(char *nom, char *ip, int port);
 void mostrarError(char *msg);
 

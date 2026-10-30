@@ -34,25 +34,29 @@ int main(int argc, char *argv[]) {
   /* Declaració de variables, p.e., int n;                                 */
   int continuar = 1;
   char *linea;
+  int codi_error;
+  char *missatge_error;
+  int socket_client;
+  char IP_server[IP_LONG] = "192.168.1.36";
+  int port_server = 8000;
+  int bufferSize = 200;
+  char buffer[bufferSize];
+  int llegit;
+  int enviat;
+  int mida_linea;
+  int llegits;
 
+  /* Expressions, estructures de control, crides a funcions, etc.          */
   while (continuar) {
 
-    int codi_error;
-    char *missatge_error;
-    int socket_client;
-
     printf("Entra la IP del servidor: ");
-    char IP_server[IP_LONG] = "192.168.1.36";
     scanf("%s", IP_server);
 
     printf("Entra el port del servidor: ");
-    int port_server = 8000;
     scanf("%d", &port_server);
 
     printf("Iniciant connexio al servidor %s amb port: %d\n", IP_server,
            port_server);
-
-    /* Expressions, estructures de control, crides a funcions, etc.          */
 
     socket_client = TCP_CreaSockClient(IPloc, portTCPloc);
     if (socket_client == -1) {
@@ -72,22 +76,13 @@ int main(int argc, char *argv[]) {
     printf("\nServer (socket remot):\n\tIP:\t%s\n\tPort:\t%d\n", IP_server,
            port_server);
 
-    // int socket_server;
-    // char *ipServer;
-    // int portServ;
-
-    // TCP_TrobaAdrSockRem(socket_server, ipServer, &portServ);
-
-    int bufferSize = 200;
-    char buffer[bufferSize];
-    int llegit = read(STDIN_FILENO, buffer, bufferSize);
+    llegit = read(STDIN_FILENO, buffer, bufferSize);
 
     buffer[llegit - 1] = '\0';
 
     while (llegit > 0 && strcmp(buffer, "EOF") != 0) {
 
       printf("Per Enviar: '%s' %d bytes\n", buffer, llegit);
-      int enviat;
       if ((enviat = enviarLinea(socket_client, buffer, llegit)) == -1) {
         mostrarError("Error enviant missatges");
         TCP_TancaSock(socket_client);
@@ -97,8 +92,6 @@ int main(int argc, char *argv[]) {
 
       printf("ESPERANT... rebre\n");
 
-      int mida_linea;
-      int llegits;
       if ((llegits = rebreLinea(socket_client, &linea, &mida_linea)) == -1) {
         mostrarError("Error rebent missatges");
         TCP_TancaSock(socket_client);
