@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 // Mostra un missatge d'error incluint el errno i l'error que s'ha donat.
 // El missatge té el següent estil:
@@ -75,12 +76,20 @@ int enviarLinea(int socket, char *msg, int msgSize) {
 int rebreLinea(int socket, char **msg, int *msgSize) {
 
   char buffer[200] = {0};
-  int bytes_rebuts;
+  int bytes_rebuts = 0;
 
-  bytes_rebuts = TCP_Rep(socket, buffer, 200);
+  char c;
+
+  while (TCP_Rep(socket, &c, 1) > 0) {
+    buffer[bytes_rebuts] = c;
+    bytes_rebuts++;
+
+    if (c == '\0') {
+      break;
+    }
+  }
 
   if (bytes_rebuts > 0) {
-
     getPecoInfo(buffer, bytes_rebuts, msg, msgSize);
   }
 
@@ -101,6 +110,7 @@ void formatToPeco(char *info, int infoSize, char tipus, char *paquet[],
                   int *paquetSize) {
 
   char *msg;
+  int i;
 
   // 1 bytes el de el tipus
   *paquetSize = infoSize + 1;
@@ -109,7 +119,9 @@ void formatToPeco(char *info, int infoSize, char tipus, char *paquet[],
 
   msg[0] = tipus;
 
-  strncpy(msg + 1, info, infoSize);
+  for (i = 0; i < infoSize; i++) {
+    msg[i + 1] = info[i];
+  }
 
   *paquet = msg;
 }
@@ -125,13 +137,16 @@ void formatToPeco(char *info, int infoSize, char tipus, char *paquet[],
 // - int *infoSize: La mida del missatge.
 void getPecoInfo(char *paquet, int paquetSize, char *info[], int *infoSize) {
   char *msg;
+  int i;
 
   // treiem el byte del tipus de paquet
   *infoSize = paquetSize - 1;
 
   msg = (char *)malloc(*infoSize);
 
-  strncpy(msg, paquet + 1, *infoSize);
+  for (i = 0; i <= *infoSize; i++) {
+    msg[i] = paquet[i + 1];
+  }
 
   *info = msg;
 }

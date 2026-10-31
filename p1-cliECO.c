@@ -35,7 +35,6 @@ int main(int argc, char *argv[]) {
   int continuar = 1;
   char *linea;
   int codi_error;
-  char *missatge_error;
   int socket_client;
   char IP_server[IP_LONG] = "192.168.1.36";
   int port_server = 8000;
